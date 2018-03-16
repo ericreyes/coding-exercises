@@ -6,7 +6,8 @@ tuples_list = [('10.0.0.0', '15.0.0.0', 'Boston'),
                ('9.255.255.255', '9.0.0.0', 'Germany'),
                ('30.0.0.0', '35.0.0.0', 'Mexico'),
                # ('5.0.0.0', '6.0.0.0', 'Cairo'),
-               # ('255.0.0.0', '253.0.0.0', 'France'),
+               ('253.0.0.0', '255.0.0.0', 'France'),
+               ('255.0.0.1', '255.0.0.5', 'Ucrania'),
                ]
 
 
@@ -94,7 +95,6 @@ def is_ip_in_range(ip, ip1, ip2):
     ip_list = ip.split('.')
     ip1_list = ip1.split('.')
     ip2_list = ip2.split('.')
-
     for ip1_number, ip2_number, ip_number in zip(ip1_list, ip2_list, ip_list):
         print ip_number, ip1_number, ip2_number
         if ip_number >= ip1_number and ip_number <= ip2_number:
@@ -128,5 +128,5 @@ tree = make_tree()
 node = tree.find_node('9.255.255.255')
 # print (node.city)
 
-ip_to_find = '11.0.0.0'
+ip_to_find = '255.0.0.3'
 print 'Found user in {} with IP {}'.format(tree.find_city_from_ip(ip_to_find), ip_to_find)

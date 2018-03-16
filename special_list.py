@@ -1,4 +1,6 @@
 import math
+import time
+
 # Implement a data structure with some special requirements:
 # SpecialLinkedList: add, and get
 
@@ -38,9 +40,8 @@ class SpecialLinkedList(object):
             new_node = Node()
             new_node.size = 1
             new_node.elements.append(new_number)
-            self.head = new_node
             self.root = new_node
-            self.tail = new_node
+            self.head = new_node
             return
         else:
             # this checks this case:  my_list.add(3) --- [1](root) <- [2, _](head)
@@ -59,6 +60,8 @@ class SpecialLinkedList(object):
         new_node.next = node
         node.tail = new_node
         self.head = new_node
+        self.head.tail = self.root
+        self.root.next = self.head
 
     def get(self, index):
         if index == 0:
@@ -105,6 +108,7 @@ class SpecialLinkedList(object):
         tmp = self.head
         while tmp is not None:
             print('Node: {}'.format(tmp.elements))
+            time.sleep(.5)
             tmp = tmp.next
 
 

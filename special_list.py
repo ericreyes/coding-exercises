@@ -1,4 +1,4 @@
-
+import math
 # Implement a data structure with some special requirements:
 # SpecialLinkedList: add, and get
 
@@ -30,6 +30,7 @@ class SpecialLinkedList(object):
     def __init__(self):
         self.head = None
         self.root = None
+        self.tail = None
 
     def add(self, new_number):
         # We have a the structure like: [1]
@@ -39,6 +40,7 @@ class SpecialLinkedList(object):
             new_node.elements.append(new_number)
             self.head = new_node
             self.root = new_node
+            self.tail = new_node
             return
         else:
             # this checks this case:  my_list.add(3) --- [1](root) <- [2, _](head)
@@ -55,26 +57,49 @@ class SpecialLinkedList(object):
         new_node.size = node.size * 2
         new_node.elements.append(new_number)
         new_node.next = node
+        node.tail = new_node
         self.head = new_node
 
     def get(self, index):
-        # index -> 3, must get me 6
-        # must retrieve from right to left
-        # [3] <- [6, 9] <- [12, , , ]
-
-
-
-
-        if index == 1:
+        if index == 0:
             return self.root.elements[0]
 
-        all_elements = []
-        while self.head is not None:
-            self.head.elements.reverse()
-            all_elements.extend(self.head.elements)
-            self.head = self.head.next
-        print('get element from right to left with index {}, result: {}'.format(index, all_elements[-index]))
-        return all_elements[-index]
+        tmp = self.head
+        total_elements = self.get_total_elements()
+        while tmp is not None:
+            for element in tmp.elements:
+                if total_elements == index:
+                    return element
+                total_elements -= 1
+            tmp = tmp.next
+
+    def get_total_elements(self):
+        n = int(math.sqrt(self.head.next.size))
+        powers = [2**i for i in range(0, n + 1)]
+        total = sum(powers) + len(self.head.elements)
+        return total
+
+    def get_from_root(self, index):
+        if index == 0:
+            return self.root.elements[0]
+
+        i_counter = 0
+        tmp = self.root
+        while tmp is not None:
+            for element in tmp.elements:
+                if i_counter == index:
+                    return element
+                i_counter += 1
+
+            tmp = tmp.tail
+        return 'not found'
+
+        # index -> 3, must get me 6
+        # must retrieve from right to left
+        # [3] <- [6, 9] <- [12, 15 ,16 ,19 ]                <- [12, 15 ,16 ,19, 12, 15 ,16 ,19 ]
+        #                       4
+
+        # I've got Size of self.head and I have how many elements that node has.
 
     def print_list(self):
         tmp = self.head
@@ -86,12 +111,8 @@ class SpecialLinkedList(object):
 # This should be the end goal:
 my_list = SpecialLinkedList()
 
-for i in range(0, 100, 3):
+for i in range(0, 7):
     my_list.add(i)
 my_list.print_list()
-my_list.get(10)
-# my_list.add(1)
-# assert my_list.head.elements[0] == 1
-
-
-
+#my_list.get_total_elements()
+assert my_list.get(2) == 2, 'Fuck, got number {}, expected: {}'.format(my_list.get(2), my_list.get_from_root(2))
